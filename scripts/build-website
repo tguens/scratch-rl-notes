@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+# Build the site from docs/*.md (via index.qmd and appendix.qmd).
+#   ./scripts/build-website                    default theme (cosmo) -> _site/
+#   ./scripts/build-website <theme>            other theme -> _site/<theme>/
+#   ./scripts/build-website --all              4 themes + picker -> _site/
+#   ./scripts/build-website --preview [theme]  live preview
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+THEMES=(litera simplex flatly cosmo)
+
+command -v quarto >/dev/null || {
+  echo "quarto not found. Install: brew install --cask quarto" >&2
+  exit 1
+}
+if [[ -f .quarto-version ]]; then
+  want=$(<.quarto-version)
+  have=$(quarto --version)
+  [[ "$want" == "$have" ]] || echo "warning: quarto $have, pinned $want" >&2
+fi
+
+if [[ "${1:-}" == "--preview" ]]; then
+  if [[ -n "${2:-}" ]]; then exec quarto preview --profile "$2"; fi
+  exec quarto preview
+fi
+
+rm -rf _site
+if [[ "${1:-}" == "--all" ]]; then
+  for t in "${THEMES[@]}"; do quarto render --profile "$t"; done
+  cp picker/index.html _site/index.html
+elif [[ $# -gt 0 ]]; then
+  quarto render --profile "$1"
+else
+  quarto render
+fi

@@ -1,0 +1,32 @@
+project:
+  type: website
+  output-dir: _site
+  render:
+    - index.qmd
+    - appendix.qmd
+
+website:
+  page-footer:
+    right: "Theo Guenais · Nov 2026"
+  title: "An analytical model of (async) RL systems"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Article
+      - href: appendix.qmd
+        text: Appendix
+    right:
+      - icon: github
+        href: https://github.com/tguens/scratch-rl-notes
+
+format:
+  html:
+    theme: cosmo # default; _quarto-<theme>.yml profiles override it
+    from: markdown+gfm_auto_identifiers # keep "6.5 ..." -> #65-...
+    css: styles.css
+    toc: true
+    toc-depth: 3
+    number-sections: false # headings are numbered by hand
+    link-external-newwindow: true
+    filters:
+      - filters/fix.lua

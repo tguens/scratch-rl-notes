@@ -1,0 +1,11 @@
+.alert-blue {
+  color: #2780e3;
+  font-weight: 700;
+}
+
+/* Wide display equations scroll inside the text column instead of running under the ToC */
+mjx-container[display="true"] {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
